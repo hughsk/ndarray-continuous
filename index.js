@@ -128,7 +128,7 @@ Continuous.prototype.range = function(hi, lo, done) {
   return finished
 }
 
-Continuous.prototype.remove = function(position) {
+Continuous.prototype.remove = function(position, done) {
   var index = this.chunkIndex(position)
   var chunk = this.index[index]
 
