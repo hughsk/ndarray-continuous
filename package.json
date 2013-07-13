@@ -1,0 +1,36 @@
+{
+  "name": "ndarray-continuous",
+  "version": "0.0.0",
+  "description": "Create continuous \"chunked\" grids/volumes with ndarrays",
+  "main": "index.js",
+  "scripts": {
+    "test": "node test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/hughsk/ndarray-continuous.git"
+  },
+  "keywords": [
+    "grid",
+    "volume",
+    "voxel",
+    "continuous",
+    "infinite",
+    "ndarray"
+  ],
+  "author": "Hugh Kennedy <hughskennedy@gmail.com> (http://hughskennedy.com/)",
+  "license": "MIT",
+  "readmeFilename": "README.md",
+  "dependencies": {
+    "map-async": "~0.1.1",
+    "cell-range": "0.0.0",
+    "zeros": "0.0.0",
+    "ndarray-group": "0.0.0"
+  },
+  "devDependencies": {
+    "isndarray": "~0.1.0",
+    "tape": "~1.0.4",
+    "ndarray-unpack": "0.0.0",
+    "ndarray-fill": "~0.1.0"
+  }
+}
