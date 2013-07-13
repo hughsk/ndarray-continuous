@@ -34,6 +34,12 @@ Retrieves a single chunk, by its position in chunkspace.
 Retrieves a [proxy](http://github.com/mikolalysenko/ndarray-proxy) array
 combining the chunks between `hi` and `lo` inclusive.
 
+### `field.range(hi, lo[, done])` ###
+
+Retrieve a proxy array that represents the points (in units) between `hi` and
+`lo`. Unlike `group` and `chunk`, you can use this to select an arbitrary area
+of elements.
+
 ### `field.index` ###
 
 The local chunk cache - an object containing each chunk, indexed by their
@@ -65,4 +71,3 @@ setTimeout(function() {
     })
 }, 1000)
 ```
-
