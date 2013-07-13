@@ -25,11 +25,11 @@ callback for returning the new array. If you want to retrieve chunks
 synchronously you can return the array as well. All chunks must be the same
 shape as specified in the `shape` option.
 
-### `field.chunk(position, done)` ###
+### `field.chunk(position[, done])` ###
 
 Retrieves a single chunk, by its position in chunkspace.
 
-### `field.group(hi, lo, done)` ###
+### `field.group(hi, lo[, done])` ###
 
 Retrieves a [proxy](http://github.com/mikolalysenko/ndarray-proxy) array
 combining the chunks between `hi` and `lo` inclusive.
