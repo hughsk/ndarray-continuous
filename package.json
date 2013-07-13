@@ -1,6 +1,6 @@
 {
   "name": "ndarray-continuous",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Create continuous \"chunked\" grids/volumes with ndarrays",
   "main": "index.js",
   "scripts": {
