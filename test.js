@@ -157,3 +157,26 @@ test('Synchronous API', function(t) {
   t.ok(isndarray(range), 'range() returned ndarray')
   t.end()
 })
+
+test('Emits events', function(t) {
+  var count = 0
+  var field = continuous({
+    shape: [5, 5],
+    getter: getter
+  }).on('created', function() {
+    count += 1
+  }).on('removed', function() {
+    count -= 1
+  })
+
+  field.chunk([0, 0])
+  t.equal(count, 1)
+  // Not if it already exists...
+  field.chunk([0, 0])
+  t.equal(count, 1)
+
+  field.group([-1, -1], [1, 1])
+  t.equal(count, 9)
+
+  t.end()
+})

@@ -71,3 +71,13 @@ setTimeout(function() {
     })
 }, 1000)
 ```
+
+### `field.on('created', callback)` ###
+
+Called when a fresh chunk has been loaded - passing the chunk as an argument to
+the callback.
+
+### `field.on('removed', callback)` ###
+
+Called when a chunk has been removed - passing the chunk as an argument to the
+callback.

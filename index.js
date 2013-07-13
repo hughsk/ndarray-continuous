@@ -1,4 +1,6 @@
+var EventEmitter = require('events').EventEmitter
 var group = require('ndarray-group')
+var inherits = require('inherits')
 var cells = require('cell-range')
 var map = require('map-async')
 var zeros = require('zeros')
@@ -7,10 +9,12 @@ function noop(){}
 
 module.exports = Continuous
 
+inherits(Continuous, EventEmitter)
 function Continuous(options) {
   if (!(this instanceof Continuous)) return new Continuous(options)
-  options = options || {}
+  EventEmitter.call(this)
 
+  options = options || {}
   if (Array.isArray(options)) {
     options = { shape: options }
   }
@@ -49,6 +53,7 @@ Continuous.prototype.chunk = function(position, done) {
 
     self.index[index] = chunk
     chunk.position = position.slice(0)
+    self.emit('created', chunk)
 
     done(null, chunk)
     return chunk
@@ -135,6 +140,7 @@ Continuous.prototype.remove = function(position, done) {
   done = done || noop
   if (!chunk) return done(null), false
 
+  self.emit('removed', chunk)
   return delete this.index[index]
 }
 
