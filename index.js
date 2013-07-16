@@ -163,7 +163,7 @@ Continuous.prototype.remove = function(position, done) {
   done = done || noop
   if (!chunk) return done(null), false
 
-  self.emit('removed', chunk)
+  this.emit('removed', chunk)
   return delete this.index[index]
 }
 
