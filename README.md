@@ -72,6 +72,16 @@ setTimeout(function() {
 }, 1000)
 ```
 
+### `field.get(position[, done])` ###
+
+A shorthand method for getting individual values directly by their position on
+the continuous ndarray.
+
+### `field.set(position, value[, done])` ###
+
+A shorthand method for setting individual values directly by their position on
+the continuous ndarray.
+
 ### `field.on('created', callback)` ###
 
 Called when a fresh chunk has been loaded - passing the chunk as an argument to

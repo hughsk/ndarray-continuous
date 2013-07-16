@@ -156,6 +156,52 @@ Continuous.prototype.range = function(hi, lo, done) {
   return finished
 }
 
+Continuous.prototype.get = function(position, done) {
+  var rounded = []
+  var result = 0
+  var dims = this.dims
+  var shape = this.shape
+  var d = dims
+
+  while (d--) rounded[d] = Math.floor(position[d] / shape[d])
+
+  done = done || function(){}
+
+  this.chunk(rounded, function(err, chunk) {
+    if (err) return done(err)
+
+    var d = dims
+    while (d--) rounded[d] = position[d] - rounded[d] * shape[d]
+
+    result = chunk.get.apply(chunk, rounded)
+    return done(null, result), result
+  })
+
+  return result
+}
+
+Continuous.prototype.set = function(position, value, done) {
+  var rounded = []
+  var shape = this.shape
+  var dims = this.dims
+  var d = dims
+
+  while (d--) rounded[d] = Math.floor(position[d] / shape[d])
+
+  done = done || function() {}
+
+  this.chunk(rounded, function(err, chunk) {
+    if (err) return done(err)
+
+    var d = dims
+    while (d--) rounded[d] = position[d] - rounded[d] * shape[d]
+    rounded[dims] = value
+
+    chunk.set.apply(chunk, rounded)
+    return done(null)
+  })
+}
+
 Continuous.prototype.remove = function(position, done) {
   var index = this.chunkIndex(position)
   var chunk = this.index[index]

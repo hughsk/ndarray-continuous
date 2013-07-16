@@ -69,6 +69,36 @@ test('continuous#group', function(t) {
   })
 })
 
+test('continuous#get', function(t) {
+  var field = continuous({
+    shape: [5, 5],
+    getter: getter
+  })
+
+  t.equal(field.get([0, 0]), 0)
+  t.equal(field.get([1, 0]), 1)
+  t.equal(field.get([0, 1]), 2)
+  t.equal(field.get([1, 1]), 3)
+  t.end()
+})
+
+test('continuous#set', function(t) {
+  var field = continuous({
+    shape: [5, 5],
+    getter: getter
+  })
+
+  t.equal(field.get([0, 0]), 0)
+  t.equal(field.get([1, 1]), 3)
+  field.set([0, 0], 100)
+  field.set([1, 1], 900)
+  field.set([2, 2], 400)
+  t.equal(field.get([0, 0]), 100)
+  t.equal(field.get([1, 1]), 900)
+  t.equal(field.get([2, 2]), 400)
+  t.end()
+})
+
 test('data shared across the instances of the same chunk', function(t) {
   t.plan(10)
 
