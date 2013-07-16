@@ -1,4 +1,4 @@
-# ndarray-continuous #
+# ndarray-continuous [![experimental](https://rawgithub.com/hughsk/stability-badges/master/dist/experimental.svg)](http://github.com/hughsk/stability-badges) #
 
 An experiment with creating continuous grids/volumes from "chunked"
 [ndarrays](http://github.com/mikolalysenko/ndarray). Ideally, this could make
