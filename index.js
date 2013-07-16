@@ -28,6 +28,7 @@ function Continuous(options) {
   this.shape = options.shape
   this.dims = this.shape.length
   this.offsets = []
+  this.pending = {}
 
   var size = 1
   for (var i = 0; i < this.shape.length; i += 1) {
@@ -48,16 +49,38 @@ Continuous.prototype.chunk = function(position, done) {
   done = done || noop
   if (chunk) return done(null, chunk), chunk
 
-  this.getter.call(this, position, function(err, chunk) {
-    if (err) return done(err)
+  if (index in this.pending) {
+    this.pending[index].push(done)
+    return null
+  }
+
+  var queue = this.pending[index] = []
+
+  this.getter.call(this, position, finished)
+
+  function finished(err, chunk) {
+    var i = 0
+    delete self.pending[index]
+
+    if (err) {
+      done(err)
+      for (;i < queue.length; i += 1) queue[i](err)
+      return queue.length = 0
+    }
 
     self.index[index] = chunk
     chunk.position = position.slice(0)
     self.emit('created', chunk)
 
     done(null, chunk)
+    for (;i < queue.length; i += 1) {
+      queue[i](null, chunk)
+    }
+
+    queue.length = 0
+
     return chunk
-  })
+  }
 
   return this.index[index] || null
 }
