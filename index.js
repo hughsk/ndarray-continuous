@@ -1,5 +1,6 @@
 var EventEmitter = require('events').EventEmitter
 var group = require('ndarray-group')
+var morton = require('morton-page')
 var inherits = require('inherits')
 var cells = require('cell-range')
 var map = require('map-async')
@@ -24,11 +25,11 @@ function Continuous(options) {
     'You need to provide a default shape for your ndarrays'
   )
 
-  this.index = {}
+  this.offsets = []
   this.shape = options.shape
   this.dims = this.shape.length
-  this.offsets = []
-  this.pending = {}
+  this.index = morton(this.dims, 4, null, 'position')
+  this.pending = morton(this.dims, 4, null, 'position')
 
   var size = 1
   for (var i = 0; i < this.shape.length; i += 1) {
@@ -37,30 +38,45 @@ function Continuous(options) {
   }
 }
 
-Continuous.prototype.chunkIndex = function(position) {
-  return position.join('|')
+Continuous.prototype.each = function(iterator) {
+  var pages = this.index.pages
+  for (var p = 0; p < pages.length; p += 1)
+  for (var c = 0; c < pages[p].length; c += 1) {
+    iterator.call(this, pages[p][c])
+  }
 }
 
 Continuous.prototype.chunk = function(position, done) {
-  var index = this.chunkIndex(position)
-  var chunk = this.index[index]
+  var chunk = this.index.get.apply(this.index, position)
   var self = this
 
   done = done || noop
   if (chunk) return done(null, chunk), chunk
 
-  if (index in this.pending) {
-    this.pending[index].push(done)
+  // Queue already exists: we're in the middle
+  // of getting this chunk, so add it to the
+  // queue
+  var pending = this.pending.get.apply(this.pending, position)
+  if (pending) {
+    pending.push(done)
     return null
   }
 
-  var queue = this.pending[index] = []
+  // Create a queue for any chunk queries
+  // that come through while we retrieve
+  // this one.
+  var queue = []
+  queue.position = position
+  this.pending.add(queue)
 
   this.getter.call(this, position, finished)
 
+  var result = null
   function finished(err, chunk) {
     var i = 0
-    delete self.pending[index]
+
+    // Clear the queue we created before.
+    self.pending.remove.apply(self.pending, position)
 
     if (err) {
       done(err)
@@ -68,8 +84,9 @@ Continuous.prototype.chunk = function(position, done) {
       return queue.length = 0
     }
 
-    self.index[index] = chunk
+    result = chunk
     chunk.position = position.slice(0)
+    self.index.add(chunk)
     self.emit('created', chunk)
 
     done(null, chunk)
@@ -82,7 +99,7 @@ Continuous.prototype.chunk = function(position, done) {
     return chunk
   }
 
-  return this.index[index] || null
+  return result
 }
 
 Continuous.prototype.group = function(hi, lo, done) {
@@ -203,14 +220,14 @@ Continuous.prototype.set = function(position, value, done) {
 }
 
 Continuous.prototype.remove = function(position, done) {
-  var index = this.chunkIndex(position)
-  var chunk = this.index[index]
+  var chunk = this.index.get.apply(this.index, position)
 
   done = done || noop
   if (!chunk) return done(null), false
 
   this.emit('removed', chunk)
-  return delete this.index[index]
+  this.index.remove.apply(this.index, position)
+  return done(null, chunk), true
 }
 
 Continuous.prototype.getter = function(position, done) {

@@ -63,12 +63,9 @@ require('cave-automata-2d')(array)(10)
 
 // things happen...
 setTimeout(function() {
-  Object.keys(field.index)
-    .filter(function() { return true })
-    .forEach(function(key) {
-      var chunk = field.index[key]
-      field.remove(chunk.position)
-    })
+  field.each(function(chunk) {
+    field.remove(chunk.position)
+  })
 }, 1000)
 ```
 
@@ -81,6 +78,11 @@ the continuous ndarray.
 
 A shorthand method for setting individual values directly by their position on
 the continuous ndarray.
+
+### `field.each(iterator)` ###
+
+Calls `iterator` for each currently instantiated chunk, passing the chunk as
+the first argument.
 
 ### `field.on('created', callback)` ###
 
