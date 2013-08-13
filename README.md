@@ -17,7 +17,7 @@ want to back the chunks with a local storage mechanism such as
 Takes an options object, with the following properties:
 
 * `shape`: the shape (dimensions) of each chunk.
-* `getter`: a function that is called when a new is required.
+* `getter`: a function that is called when a new chunk is required.
 
 The `getter` function takes two arguments, `position` and `done`. The former
 is the chunk's position (in chunks, not units), and the latter is a Node-style
