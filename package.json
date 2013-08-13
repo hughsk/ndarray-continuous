@@ -27,7 +27,7 @@
     "zeros": "0.0.0",
     "ndarray-group": "0.0.0",
     "inherits": "~2.0.0",
-    "morton-page": "0.0.0"
+    "morton-page": "~0.1.0"
   },
   "devDependencies": {
     "isndarray": "~0.1.0",
