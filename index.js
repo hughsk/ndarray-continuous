@@ -46,6 +46,15 @@ Continuous.prototype.each = function(iterator) {
   }
 }
 
+Continuous.prototype.size = function() {
+  var pages = this.index.pages
+  var c = 0
+  for (var p = 0; p < pages.length; p += 1) {
+    c += pages[p].length
+  }
+  return c
+}
+
 Continuous.prototype.chunk = function(position, done) {
   var chunk = this.index.get.apply(this.index, position)
   var self = this

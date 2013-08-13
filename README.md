@@ -84,6 +84,10 @@ the continuous ndarray.
 Calls `iterator` for each currently instantiated chunk, passing the chunk as
 the first argument.
 
+### `field.size()` ###
+
+Returns the amount of chunks currently instantiated.
+
 ### `field.on('created', callback)` ###
 
 Called when a fresh chunk has been loaded - passing the chunk as an argument to
